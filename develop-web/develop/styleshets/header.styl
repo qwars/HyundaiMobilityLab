@@ -1,0 +1,44 @@
+@import url( 'https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap' )
+
+header
+	display: flex
+	align-items: center
+	gap: 1rem
+	padding: 1rem
+	border-bottom: var( --border )
+	& > a
+		color: var( --extra-color )
+		text-decoration: none
+		display: inline-flex
+		align-items: flex-end
+		kbd
+			display: none
+		dfn
+			color: var( --extra-color )
+			text-indent: -1rem
+			padding-bottom: .5rem
+		img
+			width: 2rem
+	& > nav
+		flex-grow: 1
+		display: flex
+		grid-gap: 1rem
+		box-sizing: border-box
+		a
+			font-weight: bold
+			white-space: nowrap
+			overflow: ellipsis
+			text-overflow: hidden
+
+	& > aside
+		h1
+			margin: 0px
+			font-style: italic
+			font-family: Comfortaa, cursive
+
+	@media (orientation: portrait)
+		& > a > dfn
+			display: none
+	@media (orientation: landscape)
+		& > kbd:first-child
+			display: none

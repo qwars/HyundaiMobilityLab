@@ -1,0 +1,26 @@
+:root
+	--border: 1px solid var( --border-color )
+
+a
+	text-decoration: none
+	color: var( --link-color )
+	&.active, &:active
+		color: var( --active-color )
+	&:not(.active):hover
+		color: var( --hover-color )
+
+kbd
+	display: inline-flex
+	align-items: center
+	justify-content: center
+	color: var( --extra-color )
+	cursor: pointer
+	&:hover
+		color: var( --text-color )
+	&:active
+		color: var( --title-color )
+
+abbr
+	display: inline-flex
+	align-items: center
+	justify-content: center

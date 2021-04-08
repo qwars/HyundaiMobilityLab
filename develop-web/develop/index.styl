@@ -1,0 +1,65 @@
+
+
+:root
+	--font-text: normal normal 400 normal 13px / normal -apple-system, "Segoe UI", system-ui, Roboto, "Noto Sans", "Helvetica Neue", sans-serfi
+	--font-title: normal normal 400 normal 13px / normal -apple-system, "Segoe UI", system-ui, Roboto, "Noto Sans", "Helvetica Neue", sans-serfi
+	--font-extra: normal normal 400 normal 13px / normal -apple-system, "Segoe UI", system-ui, Roboto, "Noto Sans", "Helvetica Neue", sans-serfi
+
+@media (prefers-color-scheme: light)
+	@import './styleshets/light-scheme-theme.styl'
+
+@media (prefers-color-scheme: dark)
+	@import './styleshets/dark-scheme-theme.styl'
+
+@import './styleshets/default-tags-style.styl'
+
+html
+	min-height: 100%
+	margin: 0px
+	padding: 0px
+	height: 100%
+
+body
+	margin: 0px
+	padding: 0px
+	background: var( --canvas-color )
+	color: var( --text-color )
+	font: var( --font-text )
+	display: flex
+	flex-direction: column
+	min-height: 100vh
+	min-width: 642px
+	::selection
+		background: var( --aside-color )
+		box-shadow: none
+		outline: 0px solid transparent
+	:focus
+		// background: transparent
+		box-shadow: none
+		outline: 0px solid transparent
+	& > output
+		position: fixed
+		width: 100%
+		left: 0
+	::-internal-autofill-selected:hover,
+	::-internal-autofill-selected:focus,
+	::-internal-autofill-selected:active
+		background-color: var( --canvas-color ) !important
+
+@import './styleshets/header.styl'
+@import './styleshets/footer.styl'
+@import './styleshets/main.styl'
+
+@keyframes spin
+	50%
+		transform: rotateY( 90deg )
+
+div.loading
+	display: flex
+	align-items: center
+	justify-content: center
+	opacity: .1
+	animation: spin 3s linear infinite
+	&:before
+		content: "❄"
+		font-size: 3rem

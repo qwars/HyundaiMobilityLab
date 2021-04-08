@@ -1,0 +1,91 @@
+main
+	flex-grow: 1
+	height: 1px
+	display: grid
+	grid-template-rows: 1fr
+	grid-template-columns: 0.2fr 0.8fr auto
+	align-items: stretch
+
+.NavigationPage
+	display: grid;
+	grid-template-rows: auto 1fr auto
+	grid-template-columns: 1fr
+	box-sizing: border-box
+	transition: width .3s ease-in-out
+	& > kbd
+		width: 3rem
+		height: 3rem
+		font-size: 2rem
+		grid-area: 1/1/2/2
+		@media (orientation: portrait)
+			&
+				display: none
+	:empty + kbd
+		display: none
+		width: 0px
+	& > ul
+		grid-area: 2/1/3/2
+		list-style: none
+		margin: 0px
+		padding: 0px
+		place-self: stretch
+		overflow: none auto
+		display: flex
+		flex-direction: column
+		position: relative
+		overflow: hidden auto
+		background: var(--canvas-color )
+		abbr
+			width: 2rem
+			min-width: 2rem
+			height: 2rem
+			margin-left: .5rem
+			position: relative
+			.iq.input
+				width: 2rem
+			& > samp
+				font-size: 1.3rem
+
+		li
+			position: relative
+			min-width: 3rem
+			width: 3rem
+			transition: width .3s ease-in-out
+			a
+				display: block
+				overflow: hidden
+				display: flex
+				align-items: center
+			span
+				flex-grow: 1
+				box-sizing: border-box
+				padding: 0px 1rem
+				width: 0px
+				overflow: hidden
+				white-space: nowrap
+				text-overflow: ellipsis
+				transition: padding .1s ease-in-out
+	&.open
+		width: 19rem
+		ul
+			li
+				width: 100%
+	@media (orientation: portrait)
+		& > ul
+			border-right: var(--border)
+			padding: 1rem 0px
+			width: 3rem
+			transition: width .3s ease-in-out
+		&.open
+			width: 3rem
+			& > ul
+				width: 19rem
+				z-index: 100
+
+.ArticlePage
+	align-self: stretch
+	display: flex
+	align-items: flex-end
+	justify-content: flex-end
+	img
+		flex-grow: 1
