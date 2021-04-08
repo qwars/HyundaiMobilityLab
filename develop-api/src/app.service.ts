@@ -21,7 +21,7 @@ export class AppService {
         return await this.getDataState({ id: room, pid: floor });
     }
     
-    public async getHotelFloorRooms(floor: string) {
+    public async getHotelFloorRooms( floor: string ) {
         return await this.getDataState({ pid: floor });
     }
         
@@ -29,14 +29,15 @@ export class AppService {
         return await this.getDataState({ pid: null });
     }
 
-    public async updateHotelFloorRoom( data, floor: string, room: string ) {
+    public async updateHotelFloorRoom( data, floor: string, room: string | null ) {
         
     }
     
     public async createHotelFloorRoom( data, floor: string ) {
         
     }
-    public async deleteHotelFloorRoom( floor: string, room: string ) {
+    
+    public async deleteHotelFloorRoom( floor: string, room: string | null ) {
         
     }
     

@@ -11,8 +11,8 @@ async function bootstrap() {
         const document = SwaggerModule.createDocument(
             app,
             new DocumentBuilder()
-                .setTitle('Item API')
-                .setDescription('My Item API')
+                .setTitle('Room Reservations')
+                .setDescription('Data for room booking service')
                 .build()
         );
 
