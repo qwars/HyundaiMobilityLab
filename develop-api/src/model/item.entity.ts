@@ -7,7 +7,7 @@ export class Item extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   name: string;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ type: 'varchar', length: 300, default: '' })
   description: string;
 
   @Column({ type: 'smallint', default: 0 })

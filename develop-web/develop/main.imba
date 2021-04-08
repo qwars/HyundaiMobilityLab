@@ -6,6 +6,7 @@ tag AsidePage < aside
 		<self>
 
 tag ArticlePage < article
+
 	def render
 		<self>
 			<img src=Hotel>

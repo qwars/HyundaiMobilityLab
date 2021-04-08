@@ -1,13 +1,14 @@
 import { Controller, Get, Put, Post, Delete, Param, Body } from '@nestjs/common';
 import { ApiOperation, ApiParam } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { Item } from './model/item.entity';
 
 @Controller()
 export class AppController {
 
   constructor(private readonly appService: AppService) {}
 
-    asUUID( path: string = '' ){ return path.replace(/[^A-Z0-9-]/g, '') || null }
+    asUUID( path: string = '' ){ return path.replace(/[^A-Z0-9-]/ig, ''); }
     
   @Get('rest-api/:floor?/:room?')
     @ApiOperation({ summary: 'Get data rooms or floors in the hotel' })
@@ -47,25 +48,25 @@ export class AppController {
         type: String
     })
     public async updateHotelFloorsRooms(
-        @Body() postData: any,
+        @Body() postData: Item,
         @Param('floor') floor: string,
         @Param('room') room: string
     ) {
-        return this.appService.updateHotelFloorRoom( postData, this.asUUID( floor ), this.asUUID( room ) );
+        return this.appService.updateHotelFloorRoom( postData,  this.asUUID( room ) || this.asUUID( floor ) );
     }
 
   @Put('rest-api/:floor')
     @ApiOperation({ summary: 'Create room for floor in the hotel' })
     @ApiParam({
         name: 'floor',
-        required: true,
+        required: false,
         type: String
     })
     public async createHotelFloorsRooms(
-        @Body() postData: any,
+        @Body() postData: Item,
         @Param('floor') floor: string
     ) {
-        return this.appService.createHotelFloorRoom( postData, this.asUUID( floor ) );
+        return this.appService.createHotelFloorRoom({ ...postData, pid: this.asUUID( floor ) });
     }
 
 
@@ -85,10 +86,23 @@ export class AppController {
         @Param('floor') floor: string,
         @Param('room') room: string
     ) {
-        return this.appService.deleteHotelFloorRoom( this.asUUID( floor ), this.asUUID( room ) );
+        return this.appService.deleteHotelFloorRoom( this.asUUID( room ) || this.asUUID( floor ) );
     }
 
-    
+
+    @Post('rest-api/reservation/:id')
+    @ApiOperation({ summary: 'Reservation room or floor in the hotel' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        type: String
+    })
+    public async reservationHotelFloorsRooms(
+        @Param('id') uuid: string
+    ) {
+        return this.appService.reservationHotelFloorRoom( uuid );
+    }
+
   @Get(':floor?/:room?')
     @ApiOperation({ summary: 'Administrative subsection' })
     getAdminState(): string {
