@@ -1,14 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Item } from './model/item.entity';
 
 @Injectable()
 export class AppService {
-    getHotelFloorRooms(floor: string): string {
-        return `Hello Floor! ${ floor }`;
+    
+    constructor(
+        @InjectRepository(Item) private readonly repository: Repository<Item>,
+    ) { }
+
+    public async getDataState( state = {} ) {
+        return await this.repository.find({
+            where: state,
+            order: { lastChangedDateTime: "DESC" }
+        }).then( response => JSON.stringify( response ) );
     }
-    getHotelFloorRoom(floor: string, room: string): string {
-        return `Hello Room! ${ floor }: ${ room }`;
+    
+    public async getHotelFloorRooms(floor: string) {
+        return await this.getDataState({ pid: floor });
+
     }
-    getHotelFloors(): string {
-        return `Hello Hotel!`;
+    
+    public async getHotelFloorRoom( floor: string, room: string) {
+        return await this.getDataState({ id: room, pid: floor });
+    }
+    
+    public async  getHotelFloors() {
+        return await this.getDataState({ pid: null }) ;;
+    }
+    
+    getAdminState() {
+        return `Hello Admin!`;
     }
 }

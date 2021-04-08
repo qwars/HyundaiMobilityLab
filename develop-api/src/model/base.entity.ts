@@ -1,8 +1,12 @@
-import { PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Index, Column, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 
 export abstract class BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
+    
+    @Index()
+    @Column({ type: 'varchar', length: 300, default: null, nullable: true })
+    pid: string;
 
     @Column({ type: 'boolean', default: true })
     isActive: boolean;
@@ -24,4 +28,5 @@ export abstract class BaseEntity {
 
     @Column({ type: 'varchar', length: 300, nullable: true })
     internalComment: string | null;
+
 }
