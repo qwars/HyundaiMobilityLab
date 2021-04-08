@@ -7,6 +7,8 @@ export class AppController {
 
   constructor(private readonly appService: AppService) {}
 
+    asUUID( path: string = '' ){ return path.replace(/[^A-Z0-9-]/g, '') || null }
+    
   @Get('rest-api/:floor?/:room?')
     @ApiOperation({ summary: 'Get data rooms or floors in the hotel' })
     @ApiParam({
@@ -20,14 +22,14 @@ export class AppController {
         type: String
     })
     public async getHotelFloorsRooms(
-        @Param('floor') floor: string | null = null,
-        @Param('room') room: string | null = null
+        @Param('floor') floor: string,
+        @Param('room') room: string
     ) {
-        if ( room ) {
-            return this.appService.getHotelFloorRoom( floor, room );
+        if ( this.asUUID( room ) ) {
+            return this.appService.getHotelFloorRoom( this.asUUID( floor ), this.asUUID( room ) );
         }
-        else if ( floor ) {
-            return this.appService.getHotelFloorRooms( floor );
+        else if ( this.asUUID( floor ) ) {
+            return this.appService.getHotelFloorRooms( this.asUUID( floor ) );
         }
         return this.appService.getHotelFloors();
   }
@@ -47,9 +49,9 @@ export class AppController {
     public async updateHotelFloorsRooms(
         @Body() postData: any,
         @Param('floor') floor: string,
-        @Param('room') room: string | null = null
+        @Param('room') room: string
     ) {
-        return this.appService.updateHotelFloorRoom( postData, floor, room );
+        return this.appService.updateHotelFloorRoom( postData, this.asUUID( floor ), this.asUUID( room ) );
     }
 
   @Put('rest-api/:floor')
@@ -63,7 +65,7 @@ export class AppController {
         @Body() postData: any,
         @Param('floor') floor: string
     ) {
-        return this.appService.createHotelFloorRoom( postData, floor );
+        return this.appService.createHotelFloorRoom( postData, this.asUUID( floor ) );
     }
 
 
@@ -81,9 +83,9 @@ export class AppController {
     })
     public async deleteHotelFloorsRooms(
         @Param('floor') floor: string,
-        @Param('room') room: string | null = null
+        @Param('room') room: string
     ) {
-        return this.appService.deleteHotelFloorRoom( floor, room );
+        return this.appService.deleteHotelFloorRoom( this.asUUID( floor ), this.asUUID( room ) );
     }
 
     
