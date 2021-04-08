@@ -1,5 +1,5 @@
-import { Controller, Get, Put, Post, Delete, Param, Body } from '@nestjs/common';
-import { ApiOperation, ApiParam } from '@nestjs/swagger';
+import { Controller, Get, Put, Post, Delete, Param, Body, Query } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Item } from './model/item.entity';
 
@@ -10,7 +10,7 @@ export class AppController {
 
     asUUID( path: string = '' ){ return path.replace(/[^A-Z0-9-]/ig, ''); }
     
-  @Get('rest-api/:floor?/:room?')
+  @Get('rest-api/?:from?/:room?')
     @ApiOperation({ summary: 'Get data rooms or floors in the hotel' })
     @ApiParam({
         name: 'floor',
@@ -26,12 +26,8 @@ export class AppController {
         @Param('floor') floor: string,
         @Param('room') room: string
     ) {
-        if ( this.asUUID( room ) ) {
-            return this.appService.getHotelFloorRoom( this.asUUID( floor ), this.asUUID( room ) );
-        }
-        else if ( this.asUUID( floor ) ) {
-            return this.appService.getHotelFloorRooms( this.asUUID( floor ) );
-        }
+        if ( this.asUUID( room ) ) { return this.appService.getHotelFloorRoom( this.asUUID( floor ), this.asUUID( room ) ); }
+        if ( this.asUUID( floor ) ) { return this.appService.getHotelFloorRooms( this.asUUID( floor ) ); }
         return this.appService.getHotelFloors();
   }
 

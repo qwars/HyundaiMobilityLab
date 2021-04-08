@@ -24,7 +24,7 @@ export class AppService {
     public async getHotelFloorRooms( floor: string ) {
         return await this.getDataState({ pid: floor });
     }
-        
+            
     public async getHotelFloors() {
         return await this.getDataState({ pid: '' });
     }
