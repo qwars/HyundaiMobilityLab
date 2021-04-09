@@ -126,7 +126,7 @@ main
 				li
 					position: absolute
 					width: 7rem;
-					bottom: 6.3rem
+					bottom: 6rem
 	h2
 		margin: 1rem
 		padding: 0px 1rem
