@@ -1,5 +1,5 @@
 import { Controller, Get, Put, Post, Delete, Param, Body, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Item } from './model/item.entity';
 
@@ -9,6 +9,42 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
     asUUID( path: string = '' ){ return path.replace(/[^A-Z0-9-]/ig, ''); }
+
+    @Post('rest-api/reservation/:id')
+    @ApiOperation({ summary: 'Reservation room or floor in the hotel' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        type: String
+    })
+    @ApiQuery({
+        name: 'beginning',
+        required: true,
+        type: Date
+    })
+    @ApiQuery({
+        name: 'completion',
+        required: true,
+        type: Date
+    })
+    @ApiBody({
+        required: false,
+        type: [ String ] 
+    })
+    public async reservationHotelFloorsRooms(
+        @Body() postData: string[],
+        @Query( 'beginning' ) beginning: string,
+        @Query( 'completion' ) completion: string,
+        @Param('id') uuid: string
+    ) {
+        return this.appService.reservationHotelFloorRoom({
+            pid: this.asUUID( uuid ),
+            beginning: new Date( beginning ),
+            completion: new Date( completion ),
+            internalComment: postData[0]
+        });
+    }
+
     
   @Get('rest-api/?:from?/:room?')
     @ApiOperation({ summary: 'Get data rooms or floors in the hotel' })
@@ -83,20 +119,6 @@ export class AppController {
         @Param('room') room: string
     ) {
         return this.appService.deleteHotelFloorRoom( this.asUUID( room ) || this.asUUID( floor ) );
-    }
-
-
-    @Post('rest-api/reservation/:id')
-    @ApiOperation({ summary: 'Reservation room or floor in the hotel' })
-    @ApiParam({
-        name: 'id',
-        required: true,
-        type: String
-    })
-    public async reservationHotelFloorsRooms(
-        @Param('id') uuid: string
-    ) {
-        return this.appService.reservationHotelFloorRoom( uuid );
     }
 
   @Get(':floor?/:room?')

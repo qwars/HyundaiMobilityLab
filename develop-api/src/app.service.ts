@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { Repository } from 'typeorm';
 import { Item } from './model/item.entity';
+import { Reservation } from './model/reservation.entity';
 
 @Injectable()
 export class AppService {
     
     constructor(
         @InjectRepository(Item) private readonly repository: Repository<Item>,
+        @InjectRepository(Reservation) private readonly reservation: Repository<Reservation>
     ) { }
 
     public async getDataState( state = {} ) {
@@ -29,9 +32,19 @@ export class AppService {
         return await this.getDataState({ pid: '' });
     }
 
-    public async reservationHotelFloorRoom( uuid: string ) {
-        return await this.repository.findOne(uuid)
-            .then( response => console.log( response ) )
+    public async reservationHotelFloorRoom( data ) {
+        return await this.reservation.findOne({
+            where: {
+                pid: data.pid,
+                beginning: MoreThanOrEqual( data.beginning ),
+                completion: LessThanOrEqual( data.completion )
+            }
+        }).then( response => {
+            if( response ) { return JSON.stringify( response ); }
+            else {
+                this.reservation.insert( data ).then( response => JSON.stringify( response.identifiers[0] ) )
+            }
+        })
     }
     
     public async updateHotelFloorRoom( data: Item, uuid: string ) {
