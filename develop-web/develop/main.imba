@@ -110,7 +110,7 @@ tag NavigationPage < nav
 		application.room or application.floor
 
 	def inputComment e
-		application.internalComment = e.target.textContent
+		application.internalComment = e.target:innerHTML
 
 	def pasteAsPlainText e
 		if e.event:clipboardData then document.execCommand 'insertText', false , ( e.event:originalEvent || e.event ):clipboardData.getData('text/plain');
@@ -134,7 +134,8 @@ tag NavigationPage < nav
 					<strong> "Комментарий, пожалуйста: "
 					<p contenteditable=true data-placeholder='Здесь можно вылить все, что накипело! Приветствуется, для истории'
 						:paste.prevent.pasteAsPlainText
-						:input.silence.inputComment > application.internalComment
+						:input.silence.inputComment
+						html=application.internalComment>
 				if selected and selected:attributes:length
 					<hr> <legend> "Состояние, оснощение { application.room ? 'номера' : 'этажа' }"
 					<dl> for item in selected:attributes
