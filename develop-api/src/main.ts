@@ -15,8 +15,7 @@ async function bootstrap() {
                 .setDescription('Data for room booking service')
                 .build()
         );
-
-        SwaggerModule.setup('docs', app, document);
+        SwaggerModule.setup('docs', app, document );
 
     }
     app.enableCors();    

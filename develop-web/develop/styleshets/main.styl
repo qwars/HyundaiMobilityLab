@@ -46,6 +46,14 @@ main
 	grid-template-columns: 1fr
 	box-sizing: border-box
 	transition: width .3s ease-in-out
+	& > section > h3
+		width: 100%
+		display: flex
+		flex-direction: column
+		:first-child
+			align-self: flex-start
+		:last-child
+			align-self: flex-end
 	& > kbd
 		width: 3rem
 		height: 3rem
@@ -57,6 +65,54 @@ main
 	:empty + kbd
 		display: none
 		width: 0px
+	& > section
+		grid-area: 2/1/3/2
+		padding: 2rem 1rem
+		display: flex
+		flex-direction: column
+		grid-gap: 1rem
+		gap: 1rem
+		align-items: center
+	[contenteditable]
+		margin: 0px
+		padding: 1em
+		cursor: text
+		flex-grow: 1
+		&:hover:not(:focus):after
+			content: '\270E ...'
+			color: var( --extra-color )
+			font: var( font-text )
+			line-height: 0%
+			display: inline-block
+			transform: rotate( 180deg ) translate( -1.5ex, -1ex) scale( 1.5 )
+
+		&:empty:before
+			content: attr(data-placeholder)
+			color: var( --extra-color )
+
+
+	dl
+		display: grid
+		grid-template-columns: auto 1fr
+		grid-gap: 1rem
+		gap: 1rem
+		padding: 0px
+		margin: 0px
+		dt
+			justify-self: flex-end
+			font: var( --font-title )
+			font-size: 1rem
+			align-self: center
+			&:after
+				content: ": "
+		dd
+			padding: 0px
+			margin: 0px
+			justify-self: flex-start
+			align-self: center
+			& > time
+				font-size: 1rem
+
 	& > ul
 		grid-area: 2/1/3/2
 		list-style: none
@@ -132,6 +188,7 @@ main
 		align-items: center
 		position: absolute
 		right: 0rem
+		top: 5rem
 		overflow: hidden
 		padding: 1rem 4.5rem 1rem 1rem
 		& > span
@@ -199,17 +256,35 @@ main
 			grid-area: 1/2/3/3
 			font: var( --font--text )
 			font-size: .8rem
+			display: flex
+			align-items: center
+			gap: 1rem
+			grid-gap: 1rem
 			kbd > img
-				width: 2rem
+				max-width: 2rem
+				max-height: 2rem
 				cursor: pointer
 			em
 				font-weight: normal
 				color: var( --info-color )
 		& + div
 			width: 50vw
+			position: relative
 			img
 				min-width: 100%
 				max-width: 58vw
+				& + svg
+					position: absolute
+					z-index: 1
+					top: 0px
+					left: 0px
+			polygon
+				fill: rgba(0,0,0,0.01)
+				cursor: pointer
+				&:hover
+					stroke: red
+					stroke-width: .3rem
+
 	& > div:last-child
 		grid-area: 2/2/3/3
 		justify-self: stretch
@@ -227,13 +302,13 @@ main
 				cursor: pointer
 				&:hover
 					stroke: red
+					stroke-width: 3px
 		img
 			width: 100%
 
 
 .state-messages
 	border: var(--border)
-	border-radius: 3rem
 	color: var( --extra-color )
 	padding: 3rem
 	background: var( --canvas-color )

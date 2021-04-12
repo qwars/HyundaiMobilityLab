@@ -1,17 +1,20 @@
 import { Controller, Get, Put, Post, Delete, Param, Body, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiBody, ApiExtraModels } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Item } from './model/item.entity';
+import { Reservation } from './model/reservation.entity';
+
+@ApiExtraModels(Reservation)
 
 @Controller()
 export class AppController {
 
-  constructor(private readonly appService: AppService) {}
+    constructor(private readonly appService: AppService) {}
 
     asUUID( path: string = '' ){ return path.replace(/[^A-Z0-9-]/ig, ''); }
-
+    
     @Post('rest-api/reservation/:id')
-    @ApiOperation({ summary: 'Reservation room or floor in the hotel' })
+    @ApiOperation({ summary: 'Reservation room or floor in the hotel ( from-to )' })
     @ApiParam({
         name: 'id',
         required: true,
@@ -45,8 +48,20 @@ export class AppController {
         });
     }
 
+    @Get('rest-api/reservation/:id')
+    @ApiOperation({ summary: 'View current reservations room or floor in the hotel ( more than or equal current date )' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        type: String
+    })
+    public async reservationHotelFloorsRoomsActive(
+        @Param('id') uuid: string
+    ) {
+        return this.appService.reservationHotelFloorsRoomsActive( this.asUUID( uuid ) );
+    }
     
-  @Get('rest-api/?:from?/:room?')
+    @Get('rest-api/:floor?/:room?')
     @ApiOperation({ summary: 'Get data rooms or floors in the hotel' })
     @ApiParam({
         name: 'floor',
@@ -64,10 +79,10 @@ export class AppController {
     ) {
         if ( this.asUUID( room ) ) { return this.appService.getHotelFloorRoom( this.asUUID( floor ), this.asUUID( room ) ); }
         if ( this.asUUID( floor ) ) { return this.appService.getHotelFloorRooms( this.asUUID( floor ) ); }
-        return this.appService.getHotelFloors();
-  }
+        else { return this.appService.getHotelFloors(); }
+    }
 
-  @Post('rest-api/:floor/:room?')
+    @Post('rest-api/:floor/:room?')
     @ApiOperation({ summary: 'Update room or floor in the hotel' })
     @ApiParam({
         name: 'floor',
@@ -87,7 +102,7 @@ export class AppController {
         return this.appService.updateHotelFloorRoom( postData,  this.asUUID( room ) || this.asUUID( floor ) );
     }
 
-  @Put('rest-api/:floor')
+    @Put('rest-api/:floor')
     @ApiOperation({ summary: 'Create room for floor in the hotel' })
     @ApiParam({
         name: 'floor',
@@ -101,8 +116,7 @@ export class AppController {
         return this.appService.createHotelFloorRoom({ ...postData, pid: this.asUUID( floor ) });
     }
 
-
-  @Delete('rest-api/:floor/:room?')
+    @Delete('rest-api/:floor/:room?')
     @ApiOperation({ summary: 'Delete room or floor in the hotel' })
     @ApiParam({
         name: 'floor',
@@ -121,7 +135,7 @@ export class AppController {
         return this.appService.deleteHotelFloorRoom( this.asUUID( room ) || this.asUUID( floor ) );
     }
 
-  @Get(':floor?/:room?')
+    @Get(':floor?/:room?')
     @ApiOperation({ summary: 'Administrative subsection' })
     getAdminState(): string {
         return this.appService.getAdminState();

@@ -12,11 +12,11 @@ export class AppService {
         @InjectRepository(Item) private readonly repository: Repository<Item>,
         @InjectRepository(Reservation) private readonly reservation: Repository<Reservation>
     ) { }
-
+    
     public async getDataState( state = {} ) {
         return await this.repository.find({
             where: state,
-            order: { lastChangedDateTime: "DESC" }
+            order: { storeys: "ASC" }
         }).then( response => JSON.stringify( response ) );
     }
 
@@ -27,7 +27,7 @@ export class AppService {
     public async getHotelFloorRooms( floor: string ) {
         return await this.getDataState({ pid: floor });
     }
-            
+    
     public async getHotelFloors() {
         return await this.getDataState({ pid: '' });
     }
@@ -44,9 +44,20 @@ export class AppService {
             else {
                 this.reservation.insert( data ).then( response => JSON.stringify( response.identifiers[0] ) )
             }
-        })
+        });
     }
-    
+
+    public async reservationHotelFloorsRoomsActive( pid ) {
+        return await this.reservation.find({
+            where: {
+                pid: pid,
+                beginning: MoreThanOrEqual( new Date() ),
+                isActive: true
+            },
+            order: { beginning: "ASC" }
+        }).then( response => JSON.stringify( response ) );
+    }
+
     public async updateHotelFloorRoom( data: Item, uuid: string ) {
         return await this.repository.update({ id: uuid }, data )
             .then( response => response.affected )
